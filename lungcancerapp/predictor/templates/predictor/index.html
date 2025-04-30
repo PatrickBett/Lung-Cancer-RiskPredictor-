@@ -1,0 +1,287 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lung Cancer Risk Predictor</title>
+    <link rel="stylesheet" href="{% static 'predictor/css/style.css' %}" />
+  </head>
+  <body>
+    <header>
+      <div class="container">
+        <h1>Lung Cancer Risk Predictor</h1>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="app-description">
+        <h2>Lung Cancer Risk Predictor</h2>
+        <p>
+          This application uses machine learning to assess your potential risk
+          of lung cancer based on various health factors and lifestyle choices.
+          Please answer all questions honestly for the most accurate assessment.
+        </p>
+      </div>
+
+      <div class="form-container">
+        <h2>Health Assessment Form</h2>
+        <form
+          id="prediction-form"
+          method="post"
+          action="{% url 'predictor:predict' %}"
+        >
+          {% csrf_token %}
+
+          <div class="form-group">
+            <label>{{ form.gender.label }}</label>
+            <div class="radio-group">
+              {% for radio in form.gender %}
+              <div class="radio-option">
+                {{ radio.tag }}
+                <label for="{{ radio.id_for_label }}"
+                  >{{ radio.choice_label }}</label
+                >
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>{{ form.age.label }}</label>
+            {{ form.age }}
+          </div>
+
+          <!-- Health factors -->
+          <div class="form-row">
+            <div class="form-group">
+              <label>{{ form.smoking.label }}</label>
+              <div class="radio-group">
+                {% for radio in form.smoking %}
+                <div class="radio-option">
+                  {{ radio.tag }}
+                  <label for="{{ radio.id_for_label }}"
+                    >{{ radio.choice_label }}</label
+                  >
+                </div>
+                {% endfor %}
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>{{ form.yellow_fingers.label }}</label>
+              <div class="radio-group">
+                {% for radio in form.yellow_fingers %}
+                <div class="radio-option">
+                  {{ radio.tag }}
+                  <label for="{{ radio.id_for_label }}"
+                    >{{ radio.choice_label }}</label
+                  >
+                </div>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>{{ form.anxiety.label }}</label>
+              <div class="radio-group">
+                {% for radio in form.anxiety %}
+                <div class="radio-option">
+                  {{ radio.tag }}
+                  <label for="{{ radio.id_for_label }}"
+                    >{{ radio.choice_label }}</label
+                  >
+                </div>
+                {% endfor %}
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>{{ form.peer_pressure.label }}</label>
+              <div class="radio-group">
+                {% for radio in form.peer_pressure %}
+                <div class="radio-option">
+                  {{ radio.tag }}
+                  <label for="{{ radio.id_for_label }}"
+                    >{{ radio.choice_label }}</label
+                  >
+                </div>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>{{ form.chronic_disease.label }}</label>
+              <div class="radio-group">
+                {% for radio in form.chronic_disease %}
+                <div class="radio-option">
+                  {{ radio.tag }}
+                  <label for="{{ radio.id_for_label }}"
+                    >{{ radio.choice_label }}</label
+                  >
+                </div>
+                {% endfor %}
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>{{ form.fatigue.label }}</label>
+              <div class="radio-group">
+                {% for radio in form.fatigue %}
+                <div class="radio-option">
+                  {{ radio.tag }}
+                  <label for="{{ radio.id_for_label }}"
+                    >{{ radio.choice_label }}</label
+                  >
+                </div>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>{{ form.allergy.label }}</label>
+              <div class="radio-group">
+                {% for radio in form.allergy %}
+                <div class="radio-option">
+                  {{ radio.tag }}
+                  <label for="{{ radio.id_for_label }}"
+                    >{{ radio.choice_label }}</label
+                  >
+                </div>
+                {% endfor %}
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>{{ form.wheezing.label }}</label>
+              <div class="radio-group">
+                {% for radio in form.wheezing %}
+                <div class="radio-option">
+                  {{ radio.tag }}
+                  <label for="{{ radio.id_for_label }}"
+                    >{{ radio.choice_label }}</label
+                  >
+                </div>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>{{ form.alcohol_consuming.label }}</label>
+              <div class="radio-group">
+                {% for radio in form.alcohol_consuming %}
+                <div class="radio-option">
+                  {{ radio.tag }}
+                  <label for="{{ radio.id_for_label }}"
+                    >{{ radio.choice_label }}</label
+                  >
+                </div>
+                {% endfor %}
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>{{ form.coughing.label }}</label>
+              <div class="radio-group">
+                {% for radio in form.coughing %}
+                <div class="radio-option">
+                  {{ radio.tag }}
+                  <label for="{{ radio.id_for_label }}"
+                    >{{ radio.choice_label }}</label
+                  >
+                </div>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>{{ form.shortness_of_breath.label }}</label>
+              <div class="radio-group">
+                {% for radio in form.shortness_of_breath %}
+                <div class="radio-option">
+                  {{ radio.tag }}
+                  <label for="{{ radio.id_for_label }}"
+                    >{{ radio.choice_label }}</label
+                  >
+                </div>
+                {% endfor %}
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>{{ form.swallowing_difficulty.label }}</label>
+              <div class="radio-group">
+                {% for radio in form.swallowing_difficulty %}
+                <div class="radio-option">
+                  {{ radio.tag }}
+                  <label for="{{ radio.id_for_label }}"
+                    >{{ radio.choice_label }}</label
+                  >
+                </div>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>{{ form.chest_pain.label }}</label>
+            <div class="radio-group">
+              {% for radio in form.chest_pain %}
+              <div class="radio-option">
+                {{ radio.tag }}
+                <label for="{{ radio.id_for_label }}"
+                  >{{ radio.choice_label }}</label
+                >
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+
+          <div class="form-group">
+            <button type="submit" class="btn-primary">
+              Calculate Risk Assessment
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <div id="loading" class="loading">
+        <div class="spinner"></div>
+        <p>Processing your data...</p>
+      </div>
+
+      <div id="result-container" class="result-container">
+        <h2 id="result-heading" class="result-heading">
+          Risk Assessment Results
+        </h2>
+        <div class="result-details">
+          <div id="result-item" class="result-item">
+            <p id="prediction-text">The prediction will appear here.</p>
+            <p id="probability-text">Probability: --</p>
+            <p id="risk-level">Risk Level: --</p>
+          </div>
+        </div>
+        <div class="disclaimer">
+          <p>
+            <strong>Disclaimer:</strong> This assessment is based on a machine
+            learning model and should not be considered as medical advice.
+            Please consult with a healthcare professional for a proper
+            diagnosis.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <script src="{% static 'predictor/js/script.js' %}"></script>
+  </body>
+</html>
